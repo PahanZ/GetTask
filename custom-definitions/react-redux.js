@@ -1,8 +1,8 @@
-declare module 'react-redux' {
-  declare type typeReactRedux = {
-    name: string,
-    reason: string,
-    is_awesome: boolean
-  }
-  declare function reactRedux(name: string): typeReactRedux;
-}
+// @flow
+
+declare function connect<S, A, OP, SP>(
+  mapStateToProps: MapStateToProps<S, OP, SP>,
+  mapDispatchToProps: Null,
+  mergeProps: Null,
+  options?: ConnectOptions
+): Connector<OP, $Supertype<SP & { dispatch: Dispatch<A> } & OP>>;

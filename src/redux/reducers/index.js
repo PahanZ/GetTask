@@ -1,8 +1,5 @@
-import * as types from '../types';
+import { combineReducers } from 'redux';
+import blocks from './blocks';
+import lines from './lines';
 
-export default (state = {test: 'test'}, action ) => {
-  switch (action.type) {
-    case types.testType: return {...state, test: 'TEST'};    
-    default: return state;
-  }
-}
+export default combineReducers({ blocks, lines });
