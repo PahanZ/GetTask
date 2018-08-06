@@ -1,37 +1,29 @@
 // @flow
 
 import React from 'react';
-import { connect } from 'react-redux';
-import { createBlock } from '../../redux/actions';
-// import getBlockSelector from '../../redux/reducers/index';
 import './Container.css';
 
-type ContainerTypes = {
-  createBlock: Function
+type typesContainer<T> = {
+  addBlock: Function,
+  blocks: Array<T>,
+  lines: Array<T>
 }
 
-class Container extends React.Component<ContainerTypes> {
-  addBlock = () => {
-    this.props.createBlock({});
-  }
-
-  render() {
-    return (
-      <div
-        className="container"
-        onDoubleClick={this.addBlock}
-      />
-    );
-  }
+type typesProps = {
+  coordX: string,
+  coordY: string
 }
 
-const mapStateToProps = state => ({
-  // blocks: getBlockSelector(state.blocks),
-  blocks: state,
-});
-
-const mapDispatchToProps = {
-  createBlock,
+const Container = ({ blocks, lines, addBlock }: typesContainer<typesProps>) => {
+  console.log(blocks, lines);
+  return (
+    <div
+      className="container"
+      onDoubleClick={(e: SyntheticEvent<HTMLDivElement>) => {
+        addBlock(e);
+      }}
+    />
+  );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Container);
+export default Container;
