@@ -2,11 +2,21 @@
 
 import * as types from '../types';
 
-const { List } = require('immutable');
+type ActionTypes<T> = {
+  type: 'CREATE_BLOCK',
+  payload: T
+}
 
-export default (state = List(), action: Object): Array<Object> => {
+type payloadTypes = {
+  firstPoint: string,
+  secondPoint: string
+}
+
+export default
+(state: Array<payloadTypes> = [],
+  action: ActionTypes<payloadTypes>): Array<payloadTypes> => {
   switch (action.type) {
-    case types.CREATE_LINE: return state.push({ type: action.type });
+    case types.CREATE_LINE: return [...state, action.payload];
     default: return state;
   }
 };
