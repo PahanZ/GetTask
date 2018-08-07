@@ -18,18 +18,18 @@ type typesProps = {
 }
 
 type eventTypes = {
-  pageX: string,
-  pageY: string
+  clientX: string,
+  clientY: string
 }
 
 class App extends React.Component<typesApp<typesProps>> {
   addBlock = (e: eventTypes) => {
-    // console.log(e.pageX, e.pageY);
-    const { pageX, pageY } = e;
+    // console.log(e.clientX, e.clientY);
+    const { clientX, clientY } = e;
     const { addBlock } = this.props;
     addBlock({
-      coordX: pageX,
-      coordY: pageY,
+      coordX: clientX,
+      coordY: clientY,
     });
   }
 

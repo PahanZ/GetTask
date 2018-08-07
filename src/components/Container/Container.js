@@ -1,6 +1,8 @@
 // @flow
 
 import React from 'react';
+import randomColor from 'randomcolor';
+import Block from '../Block';
 import './Container.css';
 
 type typesContainer<T> = {
@@ -14,6 +16,12 @@ type typesProps = {
   coordY: string
 }
 
+const defaultStyles = {
+  width: '100px',
+  height: '50px',
+  position: 'absolute',
+};
+
 const Container = ({ blocks, lines, addBlock }: typesContainer<typesProps>) => {
   console.log(blocks, lines);
   return (
@@ -22,7 +30,19 @@ const Container = ({ blocks, lines, addBlock }: typesContainer<typesProps>) => {
       onDoubleClick={(e: SyntheticEvent<HTMLDivElement>) => {
         addBlock(e);
       }}
-    />
+    >
+      {blocks.map((el, i) => {
+        const top = `${Number(el.coordY) - parseInt(defaultStyles.height, 10) / 2}px`;
+        const left = `${Number(el.coordX) - parseInt(defaultStyles.width, 10) / 2}px`;
+        const background = randomColor();
+        const styles = {
+          ...defaultStyles, top, left, background,
+        };
+        return (
+          <Block key={String(i)} styles={styles} />
+        );
+      })}
+    </div>
   );
 };
 
