@@ -2,6 +2,8 @@
 
 import React from 'react';
 import randomColor from 'randomcolor';
+import HTML5Backend from 'react-dnd-html5-backend';
+import { DragDropContext } from 'react-dnd';
 import Block from '../Block';
 import './Container.css';
 
@@ -46,4 +48,4 @@ const Container = ({ blocks, lines, addBlock }: typesContainer<typesProps>) => {
   );
 };
 
-export default Container;
+export default DragDropContext(HTML5Backend)(Container);

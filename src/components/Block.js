@@ -2,9 +2,12 @@
 // @flow
 
 import React from 'react';
+import { DragLayer } from 'react-dnd';
+
 
 type BlockTypes<T> = {
     styles: T,
+    isDragging: Object
 }
 
 type PropsTypes = {
@@ -16,6 +19,32 @@ type PropsTypes = {
     background: string,
 }
 
+const getItemStyles = (props) => {
+  console.log(props);
+  // if (!currentOffset) {
+  //   return {
+  //     display: 'none',
+  //   };
+  // }
+  // const { x, y } = props.currentOffset;
+  // const transform = `translate(${x}px, ${y}px)`;
+  // return {
+  //   transform,
+  //   WebkitTransform: transform,
+  // };
+};
+
+const collect = (monitor) => {
+  console.log(monitor.getItem());
+  return {
+    item: monitor.getItem(),
+    itemType: monitor.getItemType(),
+    currentOffset: monitor.getSourceClientOffset(),
+    isDragging: monitor.isDragging(),
+  };
+};
+
+
 class Block extends React.Component<BlockTypes<PropsTypes>> {
   shouldComponentUpdate(nextProps: BlockTypes<PropsTypes>) {
     const { styles } = this.props;
@@ -23,14 +52,19 @@ class Block extends React.Component<BlockTypes<PropsTypes>> {
   }
 
   render() {
-    const { styles } = this.props;
+    const { styles, isDragging } = this.props;
+    // if (!isDragging) {
+    //   return null;
+    // }
     return (
-      <div
-        className="block"
-        style={styles}
-      />
+      <div style={styles}>
+        <div
+          className="block"
+          style={getItemStyles(this.props)}
+        />
+      </div>
     );
   }
 }
 
-export default Block;
+export default DragLayer(collect)(Block);
