@@ -3,7 +3,7 @@
 [include]
 
 [libs]
-<PROJECT_ROOT>/custom-definitions/.*
+
 [lints]
 
 [options]

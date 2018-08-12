@@ -2,12 +2,10 @@
 // @flow
 
 import React from 'react';
-import { DragLayer } from 'react-dnd';
 
 
 type BlockTypes<T> = {
     styles: T,
-    isDragging: Object
 }
 
 type PropsTypes = {
@@ -19,52 +17,59 @@ type PropsTypes = {
     background: string,
 }
 
-const getItemStyles = (props) => {
-  console.log(props);
-  // if (!currentOffset) {
-  //   return {
-  //     display: 'none',
-  //   };
-  // }
-  // const { x, y } = props.currentOffset;
-  // const transform = `translate(${x}px, ${y}px)`;
-  // return {
-  //   transform,
-  //   WebkitTransform: transform,
-  // };
-};
+type StateTypes = {
+  isDrag: boolean
+}
 
-const collect = (monitor) => {
-  console.log(monitor.getItem());
-  return {
-    item: monitor.getItem(),
-    itemType: monitor.getItemType(),
-    currentOffset: monitor.getSourceClientOffset(),
-    isDragging: monitor.isDragging(),
+type EventTypes<T> = {
+  target: HTMLDivElement,
+  style: T,
+  pageX: number,
+  pageY: number
+}
+
+
+class Block extends React.Component<BlockTypes<PropsTypes>, StateTypes> {
+  state = {
+    isDrag: false,
   };
-};
 
-
-class Block extends React.Component<BlockTypes<PropsTypes>> {
   shouldComponentUpdate(nextProps: BlockTypes<PropsTypes>) {
     const { styles } = this.props;
     return styles === nextProps.styles;
   }
 
+  dragStart = (e: EventTypes<PropsTypes>) => {
+    this.setState(prevState => ({ isDrag: !prevState.isDrag }));
+    this.move(e);
+  }
+
+  move = (e: EventTypes<PropsTypes>) => {
+    const { isDrag } = this.state;
+    if (isDrag === true) {
+      e.target.style.left = `${e.pageX - e.target.offsetWidth / 2}px`;
+      e.target.style.top = `${e.pageY - e.target.offsetHeight / 2}px`;
+    }
+  }
+
+  dragEnd = () => {
+    this.setState(prevState => ({ isDrag: !prevState.isDrag }));
+  }
+
   render() {
-    const { styles, isDragging } = this.props;
-    // if (!isDragging) {
-    //   return null;
-    // }
+    const { styles } = this.props;
     return (
-      <div style={styles}>
-        <div
-          className="block"
-          style={getItemStyles(this.props)}
-        />
-      </div>
+      <div
+        style={styles}
+        className="block"
+        onMouseDown={(e) => { this.dragStart(e); }}
+        onMouseMove={(e) => { this.move(e); }}
+        onMouseUp={() => { this.dragEnd(); }}
+        role="button"
+        tabIndex="0"
+      />
     );
   }
 }
 
-export default DragLayer(collect)(Block);
+export default Block;
