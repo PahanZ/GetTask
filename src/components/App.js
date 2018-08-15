@@ -19,14 +19,19 @@ type typesProps = {
 
 type eventTypes = {
   clientX: string,
-  clientY: string
+  clientY: string,
+  target: HTMLDivElement
 }
 
 class App extends React.Component<typesApp<typesProps>> {
   addBlock = (e: eventTypes) => {
-    // console.log(e.clientX, e.clientY);
     const { clientX, clientY } = e;
     const { addBlock } = this.props;
+
+    if (!e.target.classList.contains('container')) {
+      return;
+    }
+
     addBlock({
       coordX: clientX,
       coordY: clientY,

@@ -17,9 +17,10 @@ type typesProps = {
 }
 
 const defaultStyles = {
-  width: '100px',
-  height: '50px',
+  width: '200px',
+  height: '100px',
   position: 'absolute',
+  border: '1px solid grey',
 };
 
 const Container = ({ blocks, lines, addBlock }: typesContainer<typesProps>) => {

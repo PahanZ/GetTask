@@ -3,18 +3,17 @@
 
 import React from 'react';
 
-
 type BlockTypes<T> = {
-    styles: T,
+  styles: T,
 }
 
 type PropsTypes = {
-    width: string,
-    height: string,
-    position: string,
-    top: string,
-    left: string,
-    background: string,
+  width: string,
+  height: string,
+  position: string,
+  top: string,
+  left: string,
+  background: string,
 }
 
 type StateTypes = {
@@ -39,21 +38,36 @@ class Block extends React.Component<BlockTypes<PropsTypes>, StateTypes> {
     return styles === nextProps.styles;
   }
 
+  setPosition = (e: EventTypes<PropsTypes>) => {
+    const left = e.pageX;
+    const top = e.pageY;
+
+    const position = {
+      left: left - e.target.offsetWidth / 2,
+      top: top - e.target.offsetHeight / 2,
+    };
+
+    return position;
+  };
+
   dragStart = (e: EventTypes<PropsTypes>) => {
-    this.setState(prevState => ({ isDrag: !prevState.isDrag }));
-    this.move(e);
+    this.setState((prevState: StateTypes) => ({ isDrag: !prevState.isDrag }));
+    this.setPosition(e);
   }
 
   move = (e: EventTypes<PropsTypes>) => {
     const { isDrag } = this.state;
-    if (isDrag === true) {
-      e.target.style.left = `${e.pageX - e.target.offsetWidth / 2}px`;
-      e.target.style.top = `${e.pageY - e.target.offsetHeight / 2}px`;
+    const { left, top } = this.setPosition(e);
+    if (!isDrag) {
+      return;
     }
+
+    e.target.style.left = `${left}px`;
+    e.target.style.top = `${top}px`;
   }
 
   dragEnd = () => {
-    this.setState(prevState => ({ isDrag: !prevState.isDrag }));
+    this.setState((prevState: StateTypes) => ({ isDrag: !prevState.isDrag }));
   }
 
   render() {
@@ -62,9 +76,10 @@ class Block extends React.Component<BlockTypes<PropsTypes>, StateTypes> {
       <div
         style={styles}
         className="block"
-        onMouseDown={(e) => { this.dragStart(e); }}
-        onMouseMove={(e) => { this.move(e); }}
-        onMouseUp={() => { this.dragEnd(); }}
+        onPointerDown={this.dragStart}
+        onPointerMove={this.move}
+        onPointerUp={this.dragEnd}
+        onPointerCancel={this.dragEnd}
         role="button"
         tabIndex="0"
       />
